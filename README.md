@@ -1,6 +1,9 @@
-# 🎃 Halloween Wordle AI
-
-![Halloween Wordle AI Banner](https://res.cloudinary.com/demo/image/upload/w_700,c_thumb,g_face,f_auto,q_auto/halloween_wordle_ai.jpg)
+<div align="center">
+<a href="https://hw-wordle.vercel.app">
+<img src="https://hw-wordle.vercel.app/og.png">
+</a>
+<h1>Halloween Wordle</h1>
+</div>
 
 ## 👻 Description
 
@@ -13,7 +16,6 @@ Halloween Wordle AI is an innovative and themed version of the popular word game
 - Halloween atmospheric design
 - Cloudinary integration for image management and optimization
 - Game mode based on image interpretation
-- Leaderboard for each game
 - Each set can be shared
 
 ## 🧙‍♀️ Using Cloudinary
@@ -31,15 +33,14 @@ Cloudinary has been used in this project to:
 - Tailwind CSS
 - OpenAI API for word generation
 - DALL-E for image generation
-- Turso database (sqlite) for storing game data and leaderboard
-- Prisma ORM (with `adapter-libsql`)
+- Supabase and Prisma ORM
 
 📥 Installation
 
 1. Clone this repository:
 
 ```bash
-git clone https://github.com/tu-usuario/halloween-wordle-ai.git
+git clone https://github.com/JJozef/hw-wordle.git
 ```
 
 2. Install the dependencies:
@@ -53,32 +54,14 @@ bun i
 4. Run migrations:
 
 ```bash
-# https://www.prisma.io/docs/orm/overview/databases/turso
+bun prisma db push
 
-# 1. Create a new database on turso site
-# 2. Add your credentials to the .env file
-# 3. Install turso (in windows use WSL)
-
-# ----
-
-# 1.
 bun prisma generate
+```
 
-# 2.
-bun prisma migrate dev --name init
+5. Start the development server:
 
-# 3. (in windows terminal with WSL)
-    # 1. init wsl
-        wsl
-    # 2. install turso
-        curl -sSfL https://get.tur.so/install.sh | bash
-    # 3. login
-        turso auth login --headless
-
-# 4. (in WSL)
-turso db shell turso-prisma-db < ./prisma/migrations/20230922132717_init/migration.sql
-
-# 5.
+```bash
 bun dev
 ```
 

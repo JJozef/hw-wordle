@@ -31,14 +31,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://halloween-wordles-game.vercel.app',
+    url: 'https://hw-wordle.vercel.app',
     title: 'Halloween Wordle',
     description:
       'A spooky Halloween-themed Wordle game, all content AI-generated and managed by Cloudinary.',
     siteName: 'Halloween Wordle',
     images: [
       {
-        url: 'https://halloween-wordles-game.vercel.app/og.png',
+        url: 'https://hw-wordle.vercel.app/og.png',
         width: 1200,
         height: 630,
         alt: 'Halloween Wordle'
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     title: 'Halloween Wordle',
     description:
       'A spooky Halloween-themed Wordle game, all content AI-generated and managed by Cloudinary.',
-    images: ['https://halloween-wordles-game.vercel.app/og.png'],
+    images: ['https://hw-wordle.vercel.app/og.png'],
     creator: '@jozefzin'
   },
   icons: {
