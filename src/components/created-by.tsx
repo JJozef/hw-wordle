@@ -12,7 +12,7 @@ const CreatedBy = () => {
         <TooltipTrigger asChild>
           <Link
             className='rounded-lg border border-primary/50 p-1 hover:bg-primary/20 hover:backdrop-blur-md'
-            href='#'
+            href='https://github.com/JJozef/hw-wordle'
             rel='noopener noreferrer'
             target='_blank'
           >
