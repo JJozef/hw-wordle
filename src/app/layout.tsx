@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { cn } from '@/lib/utils'
+import { Analytics } from '@vercel/analytics/react'
 import { AppProvider } from './providers'
 import { BgAnimationIcons } from '@/components/bg-animation-icons'
 import { creepster, geistMono, geistSans } from '@/components/ui/fonts'
@@ -87,8 +88,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
             className='relative flex min-h-screen flex-col bg-background'
             vaul-drawer-wrapper=''
           >
-            <BgAnimationIcons />
             {children}
+            <BgAnimationIcons />
+            <Analytics />
           </main>
         </AppProvider>
       </body>
