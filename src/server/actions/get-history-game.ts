@@ -13,6 +13,9 @@ export const getHistotyGames = cache(async (): Promise<Game[] | null> => {
       where: {
         playerId: userIp
       },
+      orderBy: {
+        createdAt: 'desc'
+      },
       take: 10
     })
 
