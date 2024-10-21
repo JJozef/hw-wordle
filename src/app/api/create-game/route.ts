@@ -1,7 +1,7 @@
-import { Ratelimit } from '@upstash/ratelimit'
-import { Redis } from '@upstash/redis'
-import { headers } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
+import { headers } from 'next/headers'
+import { Redis } from '@upstash/redis'
+import { Ratelimit } from '@upstash/ratelimit'
 import { parseRequestBody } from '@/lib/api/utils'
 import { createGameSchema } from '@/server/schema/create-game'
 import { uploadImageWithRandomLetters } from '@/server/actions/util/upload-claudinary-image'
@@ -27,18 +27,13 @@ export const POST = async (req: NextRequest) => {
     if (!limit.success) {
       throw new HWWGAMEApiError({
         code: 'rate_limit_exceeded',
-        message: 'Rate limit exceeded'
+        message: 'You have exceeded the limit of 10 games created per hour'
       })
     }
 
     const { apiKey, difficulty } = createGameSchema.parse(
       await parseRequestBody(req)
     )
-
-    console.log({
-      apiKey,
-      difficulty
-    })
 
     if (!apiKey) {
       throw new HWWGAMEApiError({
@@ -50,7 +45,7 @@ export const POST = async (req: NextRequest) => {
     const openai = new OpenAI({ apiKey })
 
     const wordResult = await openai.chat.completions.create({
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-4o-mini-2024-07-18',
       messages: [
         { role: 'system', content: systemCreateGame },
         { role: 'user', content: prompt }
@@ -94,7 +89,7 @@ export const POST = async (req: NextRequest) => {
         word,
         image: uploadedImage.secure_url,
         wordLength: word.length,
-        difficulty: difficulty
+        difficulty
       }
     })
 
