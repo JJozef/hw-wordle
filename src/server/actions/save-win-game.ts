@@ -30,16 +30,12 @@ export const saveWinGame = async ({
       throw new Error('Game not found')
     }
 
-    const lastGuess = guesses[guesses.length - 1]
-    const updatedGuesses =
-      lastGuess === game.word ? guesses : [...guesses, game.word]
-
     const updatedGame = await db.game.update({
       where: {
         id: game.id
       },
       data: {
-        guessedWords: updatedGuesses,
+        guessedWords: guesses,
         playerId: userIp,
         playerCountry: userCity,
         playerFlag:

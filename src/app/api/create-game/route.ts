@@ -31,7 +31,14 @@ export const POST = async (req: NextRequest) => {
       })
     }
 
-    const { apiKey } = createGameSchema.parse(await parseRequestBody(req))
+    const { apiKey, difficulty } = createGameSchema.parse(
+      await parseRequestBody(req)
+    )
+
+    console.log({
+      apiKey,
+      difficulty
+    })
 
     if (!apiKey) {
       throw new HWWGAMEApiError({
@@ -86,7 +93,8 @@ export const POST = async (req: NextRequest) => {
       data: {
         word,
         image: uploadedImage.secure_url,
-        wordLength: word.length
+        wordLength: word.length,
+        difficulty: difficulty
       }
     })
 

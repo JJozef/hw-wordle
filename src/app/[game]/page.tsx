@@ -16,7 +16,7 @@ export default async function GameHome({
   if (!game) notFound()
 
   return (
-    <section className='container relative flex min-h-screen flex-col items-center justify-start gap-5 py-4'>
+    <section className='container relative z-50 flex min-h-screen flex-col items-center justify-start gap-5 py-4'>
       <div className='flex w-full items-center justify-between'>
         <Button className='group gap-1.5' variant='link' asChild>
           <Link href='/'>

@@ -2,14 +2,16 @@
 
 import { useState, useId } from 'react'
 import { z } from 'zod'
-import { Skull } from 'lucide-react'
+import { Candy, Ghost, Skull } from 'lucide-react'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { InfoApiKey } from './info-api-key'
+import { Difficulty } from '@prisma/client'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { getEnumLabel } from '@/server/helpers/get-enum-label'
 import { BeforeGameStart } from './before-game-start'
 import { createGameSchema } from '@/server/schema/create-game'
 import {
@@ -19,6 +21,13 @@ import {
   FormItem,
   FormMessage
 } from '@/components/ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
 
 const StartGame = () => {
   const [createMode, setCreateMode] = useState(false)
@@ -29,7 +38,8 @@ const StartGame = () => {
   const form = useForm<z.infer<typeof createGameSchema>>({
     resolver: zodResolver(createGameSchema),
     defaultValues: {
-      apiKey: ''
+      apiKey: '',
+      difficulty: Difficulty.EASY
     }
   })
 
@@ -42,7 +52,8 @@ const StartGame = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        apiKey: values.apiKey
+        apiKey: values.apiKey,
+        difficulty: values.difficulty
       })
     })
       .then(async (res) => {
@@ -88,19 +99,19 @@ const StartGame = () => {
   }
 
   return (
-    <div className='flex w-full flex-col items-center gap-3'>
+    <div className='mb-3 flex w-full flex-col items-center gap-6'>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className='w-full'
           id={`form-create-game${formId}`}
         >
-          <div>
+          <div className='flex w-full flex-col items-center gap-2 sm:flex-row'>
             <FormField
               control={form.control}
               name='apiKey'
               render={({ field }) => (
-                <FormItem>
+                <FormItem className='w-full grow'>
                   <FormControl>
                     <div className='relative'>
                       <Input
@@ -115,6 +126,60 @@ const StartGame = () => {
                       <InfoApiKey />
                     </div>
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='difficulty'
+              render={({ field }) => (
+                <FormItem className='w-full sm:w-auto'>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className='gap-0.5 rounded-lg border-primary px-1.5'>
+                        <SelectValue placeholder='Select difficulty' />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent
+                      className='rounded-md border border-primary bg-primary/5 backdrop-blur-lg'
+                      align='end'
+                    >
+                      <SelectItem
+                        className='cursor-pointer rounded-md'
+                        value={Difficulty.EASY}
+                        defaultChecked
+                      >
+                        <div className='flex items-center gap-1.5'>
+                          <Candy className='size-4' />
+                          {getEnumLabel('Difficulty', Difficulty.EASY)}
+                        </div>
+                      </SelectItem>
+                      <SelectItem
+                        className='cursor-pointer rounded-md'
+                        defaultChecked
+                        value={Difficulty.MEDIUM}
+                      >
+                        <div className='flex items-center gap-1.5'>
+                          <Ghost className='size-4' />
+                          {getEnumLabel('Difficulty', Difficulty.MEDIUM)}
+                        </div>
+                      </SelectItem>
+                      <SelectItem
+                        className='cursor-pointer rounded-md'
+                        defaultChecked
+                        value={Difficulty.HARD}
+                      >
+                        <div className='flex items-center gap-1.5'>
+                          <Skull className='size-4' />
+                          {getEnumLabel('Difficulty', Difficulty.HARD)}
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

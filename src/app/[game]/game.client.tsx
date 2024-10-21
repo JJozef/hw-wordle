@@ -7,10 +7,15 @@ import { Input } from '@/components/ui/input'
 import { format } from '@formkit/tempo'
 import { Button } from '@/components/ui/button'
 import { saveWinGame } from '@/server/actions/save-win-game'
+import { getEnumLabel } from '@/server/helpers/get-enum-label'
 import { GameWithWinner } from '@/types'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { GRID_SIZE, TOTAL_ATTEMPTS } from '@/constants/game'
 import { EarthIcon, SendHorizonal, TriangleAlert } from 'lucide-react'
+import {
+  getInitialRevealedSquares,
+  newRevealedSquares
+} from '@/lib/game/revealed-squares'
 import Image from 'next/image'
 
 export default function ClientGamePage({
@@ -31,12 +36,19 @@ export default function ClientGamePage({
 
     if (initialGame.isFinished) {
       setRevealedSquares([...Array(GRID_SIZE * GRID_SIZE)].map((_, i) => i))
+    } else {
+      const initialRevealed = getInitialRevealedSquares(initialGame.difficulty)
+      const squares = newRevealedSquares(initialRevealed)
+
+      setRevealedSquares(squares)
     }
   }, [initialGame])
 
   useEffect(() => {
-    revealNextSquare()
-  }, [guesses])
+    if (!gameOver && !game.isFinished && guesses.length > 0) {
+      revealNextSquare()
+    }
+  }, [guesses, gameOver, game.isFinished])
 
   useEffect(() => {
     if (game.isFinished) {
@@ -60,7 +72,7 @@ export default function ClientGamePage({
     setCurrentGuess('')
 
     if (currentGuess.toUpperCase() === game.word.toUpperCase()) {
-      toast.promise(saveWinGame({ gameId: game.id, guesses }), {
+      toast.promise(saveWinGame({ gameId: game.id, guesses: newGuesses }), {
         loading: 'Saving game...',
         success: (data) => data.message,
         error: (error) => error.message
@@ -89,9 +101,12 @@ export default function ClientGamePage({
   const resetGame = () => {
     setGuesses([])
     setCurrentGuess('')
-    setRevealedSquares([])
+
+    const initialRevealed = getInitialRevealedSquares(initialGame.difficulty)
+    const squares = newRevealedSquares(initialRevealed)
+
+    setRevealedSquares(squares)
     setGameOver(false)
-    revealNextSquare()
   }
 
   return (
@@ -225,9 +240,14 @@ export default function ClientGamePage({
           )}
         </div>
       )}
-      <p className='text-xs text-muted-foreground'>
-        Game created on {format(game.createdAt, 'MMMM D, YYYY', 'en')}
-      </p>
+      <div className='flex flex-col gap-1 text-center'>
+        <p className='text-xs text-muted-foreground'>
+          Game created on {format(game.createdAt, 'MMMM D, YYYY', 'en')}
+        </p>
+        <p className='text-xs text-muted-foreground'>
+          Difficulty: <b>{getEnumLabel('Difficulty', game.difficulty)}</b>
+        </p>
+      </div>
     </>
   )
 }
