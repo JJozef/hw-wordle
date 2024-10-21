@@ -106,7 +106,7 @@ const StartGame = () => {
           className='w-full'
           id={`form-create-game${formId}`}
         >
-          <div className='flex w-full flex-col items-center gap-2 sm:flex-row'>
+          <div className='flex w-full flex-col items-start gap-2 sm:flex-row'>
             <FormField
               control={form.control}
               name='apiKey'
