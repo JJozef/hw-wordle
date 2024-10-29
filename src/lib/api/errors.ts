@@ -89,6 +89,18 @@ export function handleApiError(error: any) {
     }
   }
 
+  if (error.code === 'model_not_found') {
+    return {
+      error: {
+        code: 'not_found',
+        message:
+          "Model error, maybe your API Key, you don't have access to DALL-E.",
+        tips: 'Please try again.'
+      },
+      status: 404
+    }
+  }
+
   // Fallback
   // Unhandled errors are not user-facing, so we don't expose the actual error
   return {
